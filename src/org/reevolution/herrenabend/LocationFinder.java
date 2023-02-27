@@ -48,7 +48,7 @@ public class LocationFinder {
       
        // call places API
        URL places = createPlacesUrl(newCoord);
-       //URL places = new URL("https://maps.googleapis.com/maps/api/place/search/json?location=52.4891097761037,13.419420904414798&types=bar|cafe&radius=500&sensor=false&key=AIzaSyB_OWuqV_leBbD83iZG_HfnLfEmh-EHerM");
+       //URL places = new URL("https://maps.googleapis.com/maps/api/place/search/json?location=52.4891097761037,13.419420904414798&types=bar|cafe&radius=500&sensor=false&key=GOOGLE_API_KEY");
        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
        public boolean verify(String string, SSLSession sslSession) {
        return true;
@@ -87,7 +87,7 @@ public class LocationFinder {
       // we could get address from current user here
       myMimeMessage.setFrom(new InternetAddress("herrenabend@herrenabend.org"));
       myMimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("alexander.thiele@dai-labor.de"));
-      myMimeMessage.setSubject("Herrenabend Vorschl‰ge");
+      myMimeMessage.setSubject("Herrenabend Vorschl√§ge");
       myMimeMessage.setSentDate(new Date());
       StringBuffer mailContent = new StringBuffer();
       for (Location tmp : locations) {
