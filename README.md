@@ -42,4 +42,14 @@ Dieses Repository folgt dem **Repository Documentation Standard v1** (Applicatio
 
 ## Deployment
 
-Da es sich um eine statische SPA handelt, lässt sie sich problemlos auf Plattformen wie GitHub Pages, Netlify oder Vercel hosten. Bei Vercel oder Netlify einfach das Repository verknüpfen und den Build-Befehl `npm run build` ausführen lassen. Wichtig: Der API Key muss in den Build-Umgebungsvariablen hinterlegt werden.
+Da es sich um eine statische SPA handelt, lässt sie sich problemlos auf Plattformen wie GitHub Pages, Netlify oder Vercel hosten. 
+
+### Via Podman / Docker
+Es gibt auch ein fertiges Setup für Podman (oder Docker), das die SPA baut und über einen schlanken Nginx-Container ausliefert:
+
+1. Stelle sicher, dass die `.env` Datei den API Key enthält: `PUBLIC_GOOGLE_PLACES_API_KEY=...`
+2. Starte den Container:
+   ```bash
+   podman-compose up -d --build
+   ```
+Die App ist danach auf dem Host unter `http://127.0.0.1:8205` erreichbar.

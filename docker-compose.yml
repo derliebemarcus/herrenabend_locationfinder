@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  locationfinder:
+    build:
+      context: .
+      dockerfile: Containerfile
+      args:
+        # Pass the API key to the build stage so Astro/Vite can bake it into the static bundle
+        - PUBLIC_GOOGLE_PLACES_API_KEY=${PUBLIC_GOOGLE_PLACES_API_KEY:-}
+    container_name: herrenabend_locationfinder
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8205:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - locationfinder
+
+networks:
+  locationfinder:
+    driver: bridge
