@@ -1,4 +1,4 @@
-# Herrenabend Locationfinder
+# <img src="public/logo.png" width="48" align="top" alt="Logo" /> Herrenabend Locationfinder
 
 Ein moderner Locationfinder für Herrenabende, der über die Google Places API nach Bars und Cafés sucht und eine zufällige, passende Location für den Abend auswählt. 
 

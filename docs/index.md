@@ -1,4 +1,4 @@
-# Herrenabend Locationfinder documentation
+# <img src="../public/logo.png" width="48" align="top" alt="Logo" /> Herrenabend Locationfinder documentation
 
 A modern, responsive Single Page Application (SPA) built with Astro, React, and Tailwind CSS to find nearby bars and cafes for a "Herrenabend" using the Google Places API.
 
