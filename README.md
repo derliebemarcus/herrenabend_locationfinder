@@ -1,43 +1,45 @@
-# Astro Starter Kit: Minimal
+# Herrenabend Locationfinder
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Ein moderner Locationfinder für Herrenabende, der über die Google Places API nach Bars und Cafés sucht und eine zufällige, passende Location für den Abend auswählt. 
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Features
 
-## 🚀 Project Structure
+- **Responsive & Modern:** Single Page Application (SPA) basierend auf Astro, React und Tailwind CSS v4.
+- **Dark & Light Mode:** Automatischer Theme-Wechsel über `prefers-color-scheme`.
+- **Deeplinking:** Einfaches Teilen von Locations, da die gewählte `placeId` in der URL hinterlegt wird.
+- **Native Share-Funktion:** Unterstützt die Web Share API für Mobile Devices (schnelles Teilen über WhatsApp, Telegram, etc.).
+- **Smart Filtering:** Schließt unpassende Kategorien wie Nachtclubs, Kunstgalerien oder Hotels automatisch aus.
+- **Barrierefrei:** Entspricht grundlegenden WCAG-Richtlinien (Kontraste, Tastatur-Bedienbarkeit).
 
-Inside of your Astro project, you'll see the following folders and files:
+## Voraussetzungen
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Du benötigst einen Google Maps / Google Places API Key.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+1. Erstelle eine `.env` Datei im Hauptverzeichnis.
+2. Füge den folgenden Schlüssel ein:
+   ```env
+   PUBLIC_GOOGLE_PLACES_API_KEY=Dein_API_Key_hier
+   ```
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Installation & Start
 
-Any static assets, like images, can be placed in the `public/` directory.
+1. Installiere die Abhängigkeiten:
+   ```bash
+   npm install
+   ```
 
-## 🧞 Commands
+2. Starte den lokalen Entwicklungsserver:
+   ```bash
+   npm run dev
+   ```
 
-All commands are run from the root of the project, from a terminal:
+Die Anwendung ist standardmäßig unter `http://localhost:4321` erreichbar.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Dokumentation
 
-## 👀 Want to learn more?
+Die vollständige Architektur- und Entwicklerdokumentation findest du unter [docs/index.md](docs/index.md).
+Dieses Repository folgt dem **Repository Documentation Standard v1** (Application Profile).
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Deployment
+
+Da es sich um eine statische SPA handelt, lässt sie sich problemlos auf Plattformen wie GitHub Pages, Netlify oder Vercel hosten. Bei Vercel oder Netlify einfach das Repository verknüpfen und den Build-Befehl `npm run build` ausführen lassen. Wichtig: Der API Key muss in den Build-Umgebungsvariablen hinterlegt werden.
