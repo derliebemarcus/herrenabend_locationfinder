@@ -1,47 +1,33 @@
-# 0001: Separate content management, presentation, search, and persistence services.
+# 0001: Initial Java Architecture (Legacy)
 
 ## Status
 
-Accepted
+Superseded by ADR 0002
 
 ## Date
 
-2026-07-04
+2014-01-01 (Estimated)
 
 ## Context
 
-Bilingual portfolio platform combining an Astro SSR frontend, Strapi CMS, Meilisearch, PostgreSQL, nginx, Podman, and systemd.
+A simple tool was needed to query Google Places API for finding bars and cafes for a "Herrenabend" (Gentlemen's evening) based on random coordinates, and send the results via email.
 
 ## Decision drivers
 
-- Accessible and responsive public pages
-- Reliable content localization
-- Reproducible container builds
-
-## Considered options
-
-1. Retain the established architecture
-2. Replace it with a tightly coupled alternative
-3. Defer the architectural boundary to deployment-specific code
+- Simple execution
+- Email delivery for sharing
+- Integration with Google Places API
 
 ## Decision
 
-Separate content management, presentation, search, and persistence services.
+Build the application as a standalone Java CLI using `org.json` for JSON parsing and Java Mail API for email delivery.
 
 ## Rationale
 
-The architecture allows independent content editing, SSR presentation, faceted search, and durable relational storage while retaining containerized deployment.
+Java was a familiar and robust language for API integration and email delivery at the time.
 
 ## Consequences
 
-- The documented building blocks and interfaces remain explicit contracts.
-- Changes to the decision require a superseding ADR.
-
-## Risks
-
-- CMS, frontend, and search schema changes can drift.
-- Container or host-level configuration drift can break deployments.
-
-## References
-
-- maintenance issue #37
+- The application is not accessible via a browser.
+- Requires a Java Runtime Environment (JRE) to run.
+- No user interface other than the terminal/email.
