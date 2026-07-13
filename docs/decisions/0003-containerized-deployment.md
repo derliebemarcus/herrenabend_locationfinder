@@ -18,6 +18,12 @@ The application needs a reliable and reproducible way to be deployed, matching t
 - Lightweight serving of static assets
 - Compatibility with existing Podman infrastructure
 
+## Considered options
+
+1. Deploy directly to Netlify or Vercel
+2. Use an Apache container
+3. Use a multi-stage Nginx container via Podman
+
 ## Decision
 
 Use a multi-stage `Containerfile` and `docker-compose.yml` (compatible with `podman-compose`) to build the Astro application using Node.js and serve the resulting static files using a lightweight Nginx container (`nginx:alpine`).
@@ -31,3 +37,12 @@ Nginx is highly optimized for serving static content. The multi-stage build ensu
 - Deployment requires a container engine (Podman or Docker).
 - The `PUBLIC_GOOGLE_PLACES_API_KEY` must be passed as a build argument during the image build process so Astro can bake it into the static bundle.
 - The application will be exposed on a defined port (default 8205) and can easily be put behind a reverse proxy.
+
+## Risks
+
+- Local Podman/Docker setup required for developers.
+- Missing `.env` file containing the API key at build time will result in a broken container.
+
+## References
+
+- Deployment standards from marcus-portfolio

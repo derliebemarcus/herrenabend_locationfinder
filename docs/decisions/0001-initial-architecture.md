@@ -31,3 +31,12 @@ Java was a familiar and robust language for API integration and email delivery a
 - The application is not accessible via a browser.
 - Requires a Java Runtime Environment (JRE) to run.
 - No user interface other than the terminal/email.
+
+## Risks
+
+- Java requirement limits accessibility.
+- API changes in Google Places might break the CLI integration without warning.
+
+## References
+
+- Initial project discussions

@@ -19,6 +19,12 @@ The legacy Java CLI application was outdated (unmaintained for 12 years) and not
 - Direct sharing capability on mobile devices without relying on server-side emails
 - Maintainability and modern web standards
 
+## Considered options
+
+1. Maintain and modernize the Java CLI
+2. Use a server-side framework (e.g. Next.js, Nuxt)
+3. Rewrite as Astro/React SPA
+
 ## Decision
 
 Rewrite the application as a client-side Single Page Application (SPA) using Astro, React, and Tailwind CSS v4. Replace the email functionality with the native Web Share API and URL Deeplinking.
@@ -33,3 +39,12 @@ Astro provides an excellent foundation for static sites, React allows for intera
 - The application requires a web server to host static files.
 - Users can share locations directly via their native mobile sharing dialog.
 - The Google Places API key must be securely provided at build time or restricted via HTTP referrers since it is exposed to the client.
+
+## Risks
+
+- Exposing the Google Places API key in the client side requires strict HTTP referrer restrictions to prevent abuse.
+- Complete rewrite may introduce new bugs not present in the legacy version.
+
+## References
+
+- Issue #42: Modernize Architecture
