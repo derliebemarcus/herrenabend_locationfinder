@@ -18,6 +18,12 @@ A simple tool was needed to query Google Places API for finding bars and cafes f
 - Email delivery for sharing
 - Integration with Google Places API
 
+## Considered options
+
+1. Build a Java CLI tool
+2. Use an existing web service
+3. Create a mobile app
+
 ## Decision
 
 Build the application as a standalone Java CLI using `org.json` for JSON parsing and Java Mail API for email delivery.
