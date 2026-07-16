@@ -30,6 +30,7 @@ ciRepositoryPipeline(
                   --file Containerfile \
                   --tag "${image}" .
             ''',
+            cleanupWorkspace: false,
         ]],
         container: [
             enabled: true,
