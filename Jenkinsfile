@@ -22,7 +22,9 @@ ciRepositoryPipeline(
             name: 'Build Astro Site',
             command: '''#!/usr/bin/env bash
                 set -euo pipefail
-                image="herrenabend-locationfinder-build-${BUILD_TAG//[^A-Za-z0-9_.-]/-}"
+                safe_tag="${BUILD_TAG//[^A-Za-z0-9_.-]/-}"
+                safe_tag="${safe_tag,,}"
+                image="herrenabend-locationfinder-build-${safe_tag}"
                 trap 'podman image rm --force "${image}" >/dev/null 2>&1 || true' EXIT
                 podman build \
                   --pull=always \
