@@ -1,109 +1,47 @@
 @Library('jenkins-shared-library@main') _
 
-ciRepositoryDocumentationContract(
-    scm: scm,
-    agentLabel: 'klymene',
-)
-
-if (ciDocumentationOnlyShortcut(
-    scm: scm,
-    agentLabel: 'klymene',
+ciRepositoryPipeline(
+    profile: 'static-site',
     repository: [
-        owner: 'derliebemarcus',
+        provider: 'forgejo',
+        owner: 'siczb',
         name: 'herrenabend_locationfinder',
     ],
-    github: [
-        credentialId: 'github token',
-        statusContext: 'Continuous Integration / Jenkins',
-        title: 'Herrenabend Locationfinder Quality Gates',
+    scmStatus: [
+        context: 'Continuous Integration / Jenkins',
+        title: 'Herrenabend Locationfinder CI',
+        credentialId: 'forgejo',
+        transport: 'api',
     ],
-)) {
-    return
-}
-
-pipeline {
-    agent any
-
-    options {
-        ansiColor('xterm')
-        timestamps()
-        disableConcurrentBuilds()
-    }
-
-    tools {
-        nodejs '22'
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Secret Scanning') {
-            steps {
-                script {
-                    echo "Running gitleaks to detect secrets..."
-                    docker.image('zricethezav/gitleaks:latest').inside('--entrypoint=""') {
-                        sh 'gitleaks detect --source="." -v || true'
-                    }
-                    sh 'sudo chown -R $(id -u):$(id -g) ${WORKSPACE} 2>/dev/null || true'
-                }
-            }
-        }
-
-        stage('Security Audit') {
-            steps {
-                echo "Running npm audit..."
-                sh 'npm audit --audit-level=high || echo "Ignoring upstream vulnerabilities for now."'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm ci --registry=https://artifacts.home.siczb.de/repository/npm-proxy/ || npm ci'
-            }
-        }
-
-        stage('Build (Dry-Run)') {
-            steps {
-                echo "Verifying build..."
-                sh 'npm run build'
-            }
-        }
-
-        stage('Push to Harbor') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    docker.withRegistry('https://registry.home.siczb.de', 'harbor-jenkins-user') {
-                        echo "Building and pushing production image to Harbor..."
-                        def appImg = docker.build("registry.home.siczb.de/siczb/herrenabend_locationfinder:latest", "-f Containerfile .")
-                        appImg.push()
-                    }
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            githubNotify(
-                credentialsId: 'github token',
-                status: "${currentBuild.result == 'ABORTED' ? 'FAILURE' : (currentBuild.result ?: 'SUCCESS')}",
-                context: 'Continuous Integration / Jenkins',
-                description: "Build ${currentBuild.result ?: 'IN PROGRESS'}"
-            )
-            publishChecks(
-                name: 'Jenkins Build',
-                title: 'Herrenabend Locationfinder Build',
-                summary: "Status: ${currentBuild.result ?: 'IN PROGRESS'}",
-                conclusion: (currentBuild.result == 'SUCCESS' ? 'SUCCESS' : (currentBuild.result == 'FAILURE' ? 'FAILURE' : (currentBuild.result == 'UNSTABLE' ? 'NEUTRAL' : 'PENDING'))),
-                status: (currentBuild.result ? 'COMPLETED' : 'IN_PROGRESS')
-            )
-        }
-    }
-}
+    features: [
+        documentationOnly: [enabled: true],
+        repositoryDocumentation: [enabled: true],
+    ],
+    profileConfig: [
+        stages: [[
+            name: 'Build Astro Site',
+            command: '''#!/usr/bin/env bash
+                set -euo pipefail
+                safe_tag="${BUILD_TAG//[^A-Za-z0-9_.-]/-}"
+                safe_tag="${safe_tag,,}"
+                image="herrenabend-locationfinder-build-${safe_tag}"
+                trap 'podman image rm --force "${image}" >/dev/null 2>&1 || true' EXIT
+                podman build \
+                  --pull=always \
+                  --target build \
+                  --file Containerfile \
+                  --tag "${image}" .
+            ''',
+            cleanupWorkspace: false,
+        ]],
+        container: [
+            enabled: true,
+            registry: 'registry.home.siczb.de',
+            image: 'siczb/herrenabend_locationfinder',
+            credentialId: 'harbor-jenkins-user',
+            containerfile: 'Containerfile',
+            branches: ['main'],
+            tags: ['latest'],
+        ],
+    ],
+)
